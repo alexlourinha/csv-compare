@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 import os
+import csv
+import tempfile
 
 
 class Application(tk.Frame):
@@ -12,13 +14,12 @@ class Application(tk.Frame):
         self.master = master
         self.create_ui()
         self.results_btn = ''
-        self.results = 'test'
-        self.results_color = 'orange'
-        self.results_label = tk.Label(self, text=self.results, fg=self.results_color)
-
+        self.results = ''
+        self.results_color = ''
+        self.results_label = tk.Label(self, text='')
 
     def open_results(self):
-        os.system("open -a 'Microsoft Excel.app' 'update.csv'")
+        os.system(f"open -a 'Microsoft Excel.app' {self.results}")
 
     def browse_file1(self):
         filename1 = askopenfilename()
@@ -41,6 +42,19 @@ class Application(tk.Frame):
             file_two = t2.readlines()
 
         diff_lines = []
+
+        handle, fn = tempfile.mkstemp(suffix='.csv')
+        with os.fdopen(handle, "w", encoding='utf8') as f:
+            writer = csv.writer(f)
+            for row in file_two:
+                if row not in file_one:
+                    try:
+                        print(row)
+                        writer.writerow([row])
+                    except Exception as e:
+                        print('Error in writing row:', e)
+
+        self.results = fn
 
         with open('update.csv', 'w') as outFile:
             for line in file_two:
