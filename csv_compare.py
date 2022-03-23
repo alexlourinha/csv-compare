@@ -4,10 +4,15 @@ import os
 import csv
 import tempfile
 
+script_path = os.path.abspath(__file__)
+script_dir = os.path.dirname(script_path)
+image_path = os.path.join(script_dir, "looking_glass.png")
+
 
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        root.geometry("400x400")
         self.file1 = ''
         self.file2 = ''
         self.pack()
@@ -17,6 +22,8 @@ class Application(tk.Frame):
         self.results = ''
         self.results_color = ''
         self.results_label = tk.Label(self, text='')
+        self.browse_label1_file = tk.Label(self, text="")
+        self.browse_label2_file = tk.Label(self, text="")
 
     def open_results(self):
         os.system(f"open -a 'Microsoft Excel.app' {self.results}")
@@ -24,14 +31,16 @@ class Application(tk.Frame):
     def browse_file1(self):
         filename1 = askopenfilename()
         self.file1 = filename1
-        browse_label1_file = tk.Label(self, text=filename1)
-        browse_label1_file.place(relx=.5, rely=.3, anchor="c")
+        self.browse_label1_file.destroy()
+        self.browse_label1_file = tk.Label(self, text=filename1)
+        self.browse_label1_file.place(relx=.5, rely=.3, anchor="c")
 
     def browse_file2(self):
         filename2 = askopenfilename()
         self.file2 = filename2
-        browse_label2_file = tk.Label(self, text=filename2)
-        browse_label2_file.place(relx=.5, rely=.5, anchor="c")
+        self.browse_label2_file.destroy()
+        self.browse_label2_file = tk.Label(self, text=filename2)
+        self.browse_label2_file.place(relx=.5, rely=.5, anchor="c")
 
     def generate_op(self):
 
@@ -63,7 +72,7 @@ class Application(tk.Frame):
                     diff_lines.append(line)
 
         error = "Files are not identical. There are " + str(len(diff_lines)) + \
-                     " different lines"
+                " different lines"
         success = "Files are identical"
 
         if len(diff_lines) > 0:
@@ -82,7 +91,7 @@ class Application(tk.Frame):
         file1 = ''
         file2 = ''
         # Adjust size
-        root.geometry("400x400")
+
         # first file
         browse_label1 = tk.Label(self, text="Original CSV File:")
         browseb1 = tk.Button(self)
