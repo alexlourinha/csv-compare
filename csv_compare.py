@@ -55,21 +55,14 @@ class Application(tk.Frame):
         handle, fn = tempfile.mkstemp(suffix='.csv')
         with os.fdopen(handle, "w", encoding='utf8') as f:
             writer = csv.writer(f)
-            for row in file_two:
-                if row not in file_one:
-                    try:
-                        print(row)
-                        writer.writerow([row])
-                    except Exception as e:
-                        print('Error in writing row:', e)
+            reader1 = csv.reader(file_one)
+            reader2 = csv.reader(file_two)
+            for row in reader2:
+                if row not in reader1:
+                    diff_lines.append(row)
+                    writer.writerow(row)
 
         self.results = fn
-
-        with open('update.csv', 'w') as outFile:
-            for line in file_two:
-                if line not in file_one:
-                    outFile.write(line)
-                    diff_lines.append(line)
 
         error = "Files are not identical. There are " + str(len(diff_lines)) + \
                 " different lines"
@@ -88,11 +81,6 @@ class Application(tk.Frame):
             self.results_label.place(relx=.5, rely=.7, anchor="c")
 
     def create_ui(self):
-        file1 = ''
-        file2 = ''
-        # Adjust size
-
-        # first file
         browse_label1 = tk.Label(self, text="Original CSV File:")
         browseb1 = tk.Button(self)
         browseb1["text"] = "Browse File"
