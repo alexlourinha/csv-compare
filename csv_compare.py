@@ -18,7 +18,7 @@ class Application(tk.Frame):
         self.pack()
         self.master = master
         self.create_ui()
-        self.results_btn = ''
+        self.results_btn = tk.Button(self, text="Open results", fg="orange")
         self.results = ''
         self.results_color = ''
         self.results_label = tk.Label(self, text='')
@@ -45,12 +45,11 @@ class Application(tk.Frame):
     def generate_op(self):
 
         self.results_label.destroy()
+        diff_lines = []
 
         with open(self.file1, 'r') as t1, open(self.file2, 'r') as t2:
             file_one = t1.readlines()
             file_two = t2.readlines()
-
-        diff_lines = []
 
         handle, fn = tempfile.mkstemp(suffix='.csv')
         with os.fdopen(handle, "w", encoding='utf8') as f:
@@ -59,6 +58,10 @@ class Application(tk.Frame):
             reader2 = csv.reader(file_two)
             for row in reader2:
                 if row not in reader1:
+                    diff_lines.append(row)
+                    writer.writerow(row)
+            for row in reader1:
+                if row not in reader2:
                     diff_lines.append(row)
                     writer.writerow(row)
 
@@ -75,8 +78,7 @@ class Application(tk.Frame):
             self.results_label = tk.Label(self, text=error, fg='red')
             self.results_label.place(relx=.5, rely=.7, anchor="c")
         else:
-            if self.results_btn:
-                self.results_btn.destroy()
+            self.results_btn.destroy()
             self.results_label = tk.Label(self, text=success, fg='green')
             self.results_label.place(relx=.5, rely=.7, anchor="c")
 
