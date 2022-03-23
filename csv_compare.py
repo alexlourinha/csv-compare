@@ -12,7 +12,7 @@ image_path = os.path.join(script_dir, "looking_glass.png")
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        root.geometry("400x400")
+        root.geometry("600x400")
         self.file1 = ''
         self.file2 = ''
         self.pack()
