@@ -8,7 +8,7 @@ import tempfile
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        root.geometry("600x600")
+        root.geometry("600x400")
         self.file1 = ''
         self.file2 = ''
         self.pack()
