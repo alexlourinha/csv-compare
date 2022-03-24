@@ -3,16 +3,20 @@ from tkinter.filedialog import askopenfilename
 import os
 import csv
 import tempfile
+from PIL import Image, ImageTk
+
 
 script_path = os.path.abspath(__file__)
 script_dir = os.path.dirname(script_path)
-image_path = os.path.join(script_dir, "looking_glass.png")
+image_path = os.path.join(script_dir, "sainsburys_tech_icon.png")
+
+
 
 
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        root.geometry("600x400")
+        root.geometry("600x600")
         self.file1 = ''
         self.file2 = ''
         self.pack()
@@ -24,6 +28,9 @@ class Application(tk.Frame):
         self.results_label = tk.Label(self, text='')
         self.browse_label1_file = tk.Label(self, text="")
         self.browse_label2_file = tk.Label(self, text="")
+        self.tech_logo = tk.PhotoImage(image_path)
+        self.icon_label = tk.Label(self, image=self.tech_logo)
+        self.icon_label.place(relx=.5, rely=.5, anchor="c")
 
     def open_results(self):
         os.system(f"open -a 'Microsoft Excel.app' {self.results}")
@@ -83,6 +90,16 @@ class Application(tk.Frame):
             self.results_label.place(relx=.5, rely=.7, anchor="c")
 
     def create_ui(self):
+        # Create a photoimage object of the image in the path
+        image1 = Image.open(image_path)
+        image1 = image1.resize((150, 150), Image.ANTIALIAS)
+        test = ImageTk.PhotoImage(image1)
+
+        label1 = tk.Label(image=test)
+        label1.image = test
+
+        # Position image
+        label1.place(x=420, y=450)
         browse_label1 = tk.Label(self, text="Original CSV File:")
         browseb1 = tk.Button(self)
         browseb1["text"] = "Browse File"
